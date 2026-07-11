@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",                          /* Современный стандарт JS */
+    "module": "CommonJS",                        /* Стандарт модулей для Node.js */
+    "lib": ["ES2022"],                           /* Библиотеки типов */
+    "allowJs": true,                             /* Разрешить компилировать JS файлы */
+    "outDir": "./dist",                          /* Куда складывать скомпилированный код */
+    "rootDir": "./src",                          /* Где лежит исходный TS код */
+    "strict": true,                              /* Строгая проверка типов */
+    "esModuleInterop": true,                     /* Совместимость импортов (import x from 'y') */
+    "skipLibCheck": true,                        /* Пропускать проверку типов в node_modules */
+    "forceConsistentCasingInFileNames": true     /* Учет регистра в именах файлов */
+  },
+  "include": ["src/**/*"]                        /* Компилировать всё из папки src */
+}

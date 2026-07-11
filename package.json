@@ -1,0 +1,19 @@
+{
+  "name": "dzen-test-app-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "cd socket-server && pnpm dev",
+    "dev:client": "cd next-client && pnpm dev",
+    "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "concurrently": "^10.0.3"
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+.env
+dist/
+.next/
+next-client/.next/
+next-client/.env
+next-client/node_modules/
+socket-server/node_modules/
+socket-server/.env

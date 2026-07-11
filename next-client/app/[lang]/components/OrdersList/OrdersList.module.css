@@ -1,0 +1,13 @@
+.smooth-table-container {
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.15s ease-in-out;
+}
+
+.orders-table-collapsed {
+    max-width: 300px;
+}
+
+.orders-table-expanded {
+    max-width: 100%;
+}

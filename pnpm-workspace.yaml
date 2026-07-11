@@ -1,0 +1,7 @@
+packages:
+  - "next-client"
+  - "socket-server"
+  - "shared"
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
