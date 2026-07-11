@@ -9,6 +9,7 @@ import NavigationMenu from "./components/NavigationMenu/NavigationMenu";
 import StoreProvider from "./components/StoreProvider";
 import DataInitializer from "./components/DataInitializer/DataInitializer";
 import { getI18n } from "../i18n";
+import { Locale } from "../types/definitions";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,11 +35,11 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{lang: 'en' | 'ru'}>
+  params: Promise<{lang: string}>
 }>) {
 
   const { lang } = await params;
-  const dict = await getI18n(lang);
+  const dict = await getI18n(lang as Locale);
 
   return (
     <html

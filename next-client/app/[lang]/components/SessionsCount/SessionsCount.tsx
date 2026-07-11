@@ -5,7 +5,8 @@ import { io, Socket } from "socket.io-client";
 import { ServerToClientEvents, ClientToServerEvents } from "@/shared/types/socket";
 
 // 🌟 Inject types into the Client Socket instance
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("http://localhost:3001", {
+const url = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(url, {
   autoConnect: false // Connect manually inside useEffect
 });
 
