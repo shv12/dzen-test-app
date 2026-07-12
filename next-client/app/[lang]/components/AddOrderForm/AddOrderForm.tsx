@@ -16,7 +16,7 @@ import { localeSelector } from "@/app/lib/redux/selectors";
 export default function AddOrderForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { dict } = useAppSelector(localeSelector);
+  const { locale, dict } = useAppSelector(localeSelector);
   const t = useTranslations(dict);
   const orderSchema = createOrderSchema(t);
   type OrderFormValues = z.infer<typeof orderSchema>;
@@ -67,7 +67,7 @@ export default function AddOrderForm() {
       const { success, result } = response.data;
       if (success) {
         dispatch(addOrderAction(result));
-        router.push("/orders");
+        router.push(`/${locale}/orders`);
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
