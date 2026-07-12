@@ -1,0 +1,51 @@
+services:
+  # 1. THE DATABASE (MySQL)
+  database:
+    image: mysql:8.0
+    container_name: dzen-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=dzen_test_app_db
+    volumes:
+      # Keeps your DB data safe on your computer even if the container stops
+      - mysql_data:/var/lib/mysql
+      # Automatically executes your schema setup file on first launch
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # 2. THE WEBSOCKET BACKEND (Node.js)
+  websocket:
+    build:
+      context: ./socket-server
+    container_name: dzen-ws-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+    depends_on:
+      - database # Waits for the DB to start before booting up
+
+  # 3. THE FRONTEND (Next.js)
+  frontend:
+    build:
+      context: ./next-client
+    container_name: dzen-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - WATCHBACK_POLLING=true
+      - NEXT_PUBLIC_SOCKET_URL=http://localhost:3001
+      - DB_HOST=database # Notice we use the service name 'database' instead of localhost here!
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=dzen_test_app_db
+    volumes:
+      - ./next-client:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - websocket # Waits for the websocket server to boot up
+
+volumes:
+  mysql_data:
