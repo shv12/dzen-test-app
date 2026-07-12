@@ -1,0 +1,29 @@
+CREATE TABLE IF NOT EXISTS orders (
+  id int AUTO_INCREMENT PRIMARY KEY,
+  orderName VARCHAR(255) NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+
+CREATE TABLE IF NOT EXISTS productTypes (
+  id int AUTO_INCREMENT PRIMARY KEY,
+  productType VARCHAR(255) NOT NULL
+  );
+
+CREATE TABLE IF NOT EXISTS products (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  productName VARCHAR(255) NOT NULL,
+  productType INT NOT NULL,
+  guaranteeFrom DATE NOT NULL,
+  guaranteeUntil DATE NOT NULL,
+  priceUAH INT,
+  priceUSD INT,
+  orderID INT NOT NULL,
+
+  CONSTRAINT fk_product_type
+    FOREIGN KEY (productType) REFERENCES productTypes(id)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+
+  CONSTRAINT fk_product_order
+    FOREIGN KEY (orderID) REFERENCES orders(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+  );
