@@ -11,7 +11,12 @@ The application consists of two servers - Next.js part (runs on 3000 port) and N
 
 1. Set up system
 
-Install Git and Docker <code>sudo apt install git docker</code>
+Install Git and Docker
+
+<pre>
+sudo apt install git
+snap install docker
+</pre>
 
 2. Clone the project repo and create .env files in root directory and in next-client and socket-server directories.
 
