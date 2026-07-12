@@ -29,8 +29,8 @@ services:
     environment:
       - PORT=3001
     depends_on:
-      - database: # Waits for the DB to start before booting up
-        - condition: service_healthy
+      database: # Waits for the DB to start before booting up
+        condition: service_healthy
 
   # 3. THE FRONTEND (Next.js)
   frontend:
@@ -51,9 +51,10 @@ services:
       - /app/node_modules
       - /app/.next
     depends_on:
-      - websocket # Waits for the websocket server to boot up
-      - database: # Waits for the DB to start before booting up
-        - condition: service_healthy
+      websocket: # Waits for the websocket server to boot up
+        condition: service_started
+      database: # Waits for the DB to start before booting up
+        condition: service_healthy
 
 volumes:
   mysql_data:
