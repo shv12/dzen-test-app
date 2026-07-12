@@ -2,15 +2,25 @@ import { NextResponse } from "next/server";
 import mysql from 'mysql2/promise';
 import { addOrder, getOrder } from "@/app/lib/actions";
 
+function getPort() {
+  const defaultPort = 4000;
+  const strPort = process.env.TIDB_PORT;
+  if (typeof strPort === 'string') {
+    return parseInt(strPort) || defaultPort;
+  } else {
+    return defaultPort;
+  }
+}
+
 async function initDatabase() {
   const connection = await mysql.createConnection({
     host: process.env.TIDB_HOST || 'localhost',
-    port: 4000,
+    port: getPort(),
     user: process.env.TIDB_USER || 'root',
     password: process.env.TIDB_PASSWORD || '',
     ssl: {
       minVersion: 'TLSv1.2',
-      rejectUnauthorized: true
+      rejectUnauthorized: process.env.TIDB_REJECT_UNAUTHORIZED === "1"
     }
   });
   try {
@@ -34,13 +44,13 @@ console.log('🔄 Подключение к TiDB установлено. Соз�
 export const createConnection = async () => {
   return await mysql.createConnection({
     host: process.env.TIDB_HOST || 'localhost',
-    port: 4000,
+    port: getPort(),
     user: process.env.TIDB_USER || 'root',
     password: process.env.TIDB_PASSWORD || '',
     database: process.env.TIDB_NAME || 'dzen_test_app_db',
     ssl: {
       minVersion: 'TLSv1.2',
-      rejectUnauthorized: true
+      rejectUnauthorized: process.env.TIDB_REJECT_UNAUTHORIZED === "1"
     }
   });
 }
