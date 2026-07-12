@@ -3,6 +3,7 @@ node_modules/
 dist/
 .next/
 next-client/.next/
+next-client/.pnpm-store/
 next-client/.env
 next-client/node_modules/
 socket-server/node_modules/
