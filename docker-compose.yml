@@ -8,6 +8,11 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=dzen_test_app_db
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     volumes:
       # Keeps your DB data safe on your computer even if the container stops
       - mysql_data:/var/lib/mysql
@@ -24,7 +29,8 @@ services:
     environment:
       - PORT=3001
     depends_on:
-      - database # Waits for the DB to start before booting up
+      - database: # Waits for the DB to start before booting up
+        - condition: service_healthy
 
   # 3. THE FRONTEND (Next.js)
   frontend:
@@ -46,6 +52,8 @@ services:
       - /app/.next
     depends_on:
       - websocket # Waits for the websocket server to boot up
+      - database: # Waits for the DB to start before booting up
+        - condition: service_healthy
 
 volumes:
   mysql_data:
