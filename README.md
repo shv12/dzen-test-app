@@ -28,6 +28,8 @@ echo 'TIDB_HOST=database' >> next-client/.env
 echo 'TIDB_USER=root' >> next-client/.env
 echo 'TIDB_PASSWORD=rootpassword' >> next-client/.env
 echo 'TIDB_NAME=dzen_test_app_db' >> next-client/.env
+echo 'TIDB_PORT=3306' >> next-client/.env
+echo 'TIDB_REJECT_UNAUTHORIZED=0' >> next-client/.env
 echo 'NEXT_PUBLIC_SOCKET_URL=https://localhost:3001/' >> next-client/.env
 echo 'PORT=3001' >> socket-server/.env
 </pre>
