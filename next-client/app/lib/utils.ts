@@ -12,7 +12,7 @@ export const deleteProduct = async (
   setIsLoading: (loading: boolean) => void,
 ) => {
   console.log("deleteOrder from utils");
-    console.log("utils :: deleteOrder :: productID", productID);
+    console.log("utils :: deleteOrder :: productID", productID, "orderID", orderID);
     setIsLoading(true);
     const { data } = await api.post("/api/products/deleteOrderProduct", { productID });
     const { result, success } = data;

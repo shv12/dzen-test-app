@@ -23,7 +23,7 @@ export default function ProductsList() {
     const fetchProducts = async () => {
       try {
         const result = await api.get("/api/products", { signal: abortController.signal });
-        // console.log("ProductsList :: fetchProducts :: result.data", result.data);
+        console.log("ProductsList :: fetchProducts :: result.data", result.data);
         dispatch(setProducts(result.data.products));
       } catch (err) {
         if (axios.isCancel(err)) {

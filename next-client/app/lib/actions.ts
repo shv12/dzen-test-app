@@ -156,6 +156,7 @@ export const getProduct = async ({ connection, productID }: {
       p.priceUSD,
       p.priceUAH,
       p.productType,
+      p.orderID,
       pt.productType AS productTypeName,
       o.orderName
     FROM
@@ -188,6 +189,7 @@ export const getProducts = async ({ connection }: { connection: mysql.Connection
       p.priceUSD,
       p.priceUAH,
       p.productType,
+      p.orderID,
       pt.productType AS productTypeName,
       o.orderName
     FROM

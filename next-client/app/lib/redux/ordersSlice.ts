@@ -46,6 +46,7 @@ export const ordersSlice = createSlice({
     },
     deleteProductFromOrder(state, action: PayloadAction<{ productID: number, orderID: number, priceUAH: number, priceUSD: number }>) {
       const { orderID, priceUAH, priceUSD } = action.payload;
+      console.log("ordersSlice :: deleteProductFromOrder :: orderID", orderID);
       for (let i = 0; i < state.orders.length; i++) {
         const order = state.orders[i];
         if (order.id === orderID) {
