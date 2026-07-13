@@ -38,12 +38,16 @@ export default function ProductRow({ product }: { product: Product }) {
     <td>{productTypeName}</td>
     <td>
       <div className="small">
-        <div className="d-flex"><div className="me-2 text-gray-400">{ t('from')}</div><div>{getLongDate(guaranteeFromDate, locale)} ({ getShortDate(guaranteeFromDate)})</div></div>
-        <div className="d-flex"><div className="me-2 text-gray-400">{ t('until')}</div><div>{getLongDate(guaranteeUntilDate, locale)} ({ getShortDate(guaranteeUntilDate)})</div></div>
+        <div className="d-flex"><div className="me-2 text-gray-400">{t('from')}</div><div><div className="text-nowrap">
+          {getLongDate(guaranteeFromDate, locale)}
+        </div> ({ getShortDate(guaranteeFromDate)})</div></div>
+        <div className="d-flex"><div className="me-2 text-gray-400">{t('until')}</div><div><div className="text-nowrap">
+          {getLongDate(guaranteeUntilDate, locale)}
+        </div> ({ getShortDate(guaranteeUntilDate)})</div></div>
       </div>
     </td>
     <td>
-      <div className="small">
+      <div className="small text-nowrap">
         {priceUSD > 0 && <div>{ priceUSD} USD</div>}
       {priceUAH > 0 && <div>{ priceUAH} UAH</div>}
       </div>

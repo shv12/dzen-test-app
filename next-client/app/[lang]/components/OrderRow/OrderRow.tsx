@@ -21,21 +21,25 @@ export default function OrderRow({order, mode, onDelete, onOrderClick, isCurrent
   }}>
   {mode === "long" &&<td>{ order.orderName}</td>}
   <td>
-      <div className="d-flex align-items-center">
+    <div className="d-flex align-items-center">
       <BiListUl size={24} className="mx-2 border rounded-circle" />
       <div>
-      <div className="text-lg fw-bold">
-      {order.productsCount}
+        <div className="text-lg fw-bold">
+          {order.productsCount}
+        </div>
+        product(s)
       </div>
-          product(s)
-      </div>
-      </div>
-      </td>
-      <td className="text-center"><div className="small text-gray-400">
-      {getShortDate(createdAt)}
-      </div>
-      {getLongDate(createdAt, locale)}</td>
-    {mode === "long" && <td>{order.amountUSD} USD<br />{order.amountUAH} UAH</td>}
+    </div>
+  </td>
+  <td className="text-center">
+    <div className="small text-gray-400 text-nowrap">
+    {getShortDate(createdAt)}
+    </div>
+    <div className="text-nowrap">
+      {getLongDate(createdAt, locale)}
+    </div>
+  </td>
+    {mode === "long" && <td className="text-nowrap">{order.amountUSD} USD<br />{order.amountUAH} UAH</td>}
     {mode === "long" && <td><button
       onClick={(e) => {
         e.stopPropagation();
