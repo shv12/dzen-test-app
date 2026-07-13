@@ -53,19 +53,27 @@ sudo apt-get install git node
 npm install -g pnpm
 </pre>
 
-2. Clone Git repo. Create next-client/.env.
-
-3. Create MySQL or TiDB cluster. Fill in .env with connection string data.
+2. Clone Git repo. Create .env, next-client/.env, socket-server/.env.
 
 <pre>
-TIDB_HOST=gateway01.eu-central-1.prod.aws.tidbcloud.com
-TIDB_USER=
-TIDB_PASSWORD=
-TIDB_NAME=dzen_test_app_db
+git clone https://github.com/shv12/dzen-test-app.git
+cd dzen-test-app
+echo 'MYSQL_ROOT_PASSWORD=rootpassword' >> .env
+echo 'TIDB_HOST=' >> next-client/.env
+echo 'TIDB_USER=' >> next-client/.env
+echo 'TIDB_PASSWORD=' >> next-client/.env
+echo 'TIDB_NAME=dzen_test_app_db' >> next-client/.env
+echo 'TIDB_PORT=' >> next-client/.env
+echo 'TIDB_REJECT_UNAUTHORIZED=' >> next-client/.env
+echo 'NEXT_PUBLIC_SOCKET_URL=' >> next-client/.env
+echo 'PORT=3001' >> socket-server/.env
 </pre>
 
-Change TIDB_HOST to value from connection string. Port value is 4000.
-For run Node server-socket on different host - add NEXT_PUBLIC_SOCKET_URL.
+TIDB_PORT equal to 3306 for MySQL and 4000 for TiDB.
+TIDB_REJECT_UNAUTHORIZED equal to 0 for HTTP and 1 for HTTPS.
+NEXT_PUBLIC_SOCKET_URL equal to URL for socket server.
+
+3. Create MySQL or TiDB cluster. Fill in .env with connection string data.
 
 4. Install node_modules
 
