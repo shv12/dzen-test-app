@@ -83,7 +83,7 @@ export default function AddProductForm() {
   ) => {
     const typedName = name as keyof ProductFormValues;
 
-    return <div key={name} className="rounded bg-light mb-0 px-4">
+    return <div key={name} className="rounded bg-light mb-0 px-4 col-12 col-lg-6">
           <label htmlFor={name}>{label}</label>
           <div>
         <Field type={ type}
@@ -173,10 +173,12 @@ const handleSubmit = async (values: ProductFormValues, { resetForm }: {resetForm
   >{
       ({ isSubmitting, errors, touched }) => (
     <Form>
-      <div className="container-fluid">
-          {fields.map((field) => {
-            return formField(field, errors, touched);
-          })}
+        <div className="container-fluid">
+          <div className="row">
+            {fields.map((field) => {
+              return formField(field, errors, touched);
+            })}
+          </div>
         </div>
         <AppLink href="/orders" className="btn btn-secondary fw-medium mr-4">{t('cancel')}</AppLink>
         <button
