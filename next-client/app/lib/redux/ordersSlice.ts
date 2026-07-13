@@ -25,6 +25,7 @@ export const ordersSlice = createSlice({
   reducers: {
     addOrderAction(state, action: PayloadAction<Order>) {
       state.orders = [action.payload, ...state.orders];
+      console.log("ordersSlice :: addOrderAction :: action.payload", action.payload);
     },
     addProductToAction(state, action: PayloadAction<{ orderID: number, priceUAH: number, priceUSD: number }>) {
       const { orderID, priceUAH, priceUSD } = action.payload;

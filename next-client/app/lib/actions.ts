@@ -55,9 +55,9 @@ export const addProduct = async ({ connection, payload }: {
   ];
   const [result] = await connection.execute(sql, values);
   const insertResult = result as mysql.ResultSetHeader;
-  console.log('actions :: addProduct :: insertResult', insertResult);
+  // console.log('actions :: addProduct :: insertResult', insertResult);
   const addedProduct = await getProduct({ connection, productID: insertResult.insertId });
-  console.log('actions :: addProduct :: addedProduct', addedProduct);
+  // console.log('actions :: addProduct :: addedProduct', addedProduct);
   return addedProduct;
 }
 
@@ -117,8 +117,8 @@ export const getOrder = async ({ connection, orderID }: {connection: mysql.Conne
         o.orderName,
         o.createdAt,
         COUNT(p.id) AS productsCount,
-        IFNULL(SUM(p.priceUAH), 0) AS amountUAH,
-        IFNULL(SUM(p.priceUSD), 0) AS amountUSD
+        CAST(IFNULL(SUM(p.priceUAH), 0) AS DOUBLE) AS amountUAH,
+        CAST(IFNULL(SUM(p.priceUSD), 0) AS DOUBLE) AS amountUSD
       FROM orders o
       LEFT JOIN products p ON o.id = p.orderID
       WHERE o.id = ?
@@ -127,7 +127,7 @@ export const getOrder = async ({ connection, orderID }: {connection: mysql.Conne
   `;
   const values = [orderID,];
   const [result] = await connection.execute(sql, values);
-//   console.log('getOrder :: result', result);
+  // console.log('getOrder :: result', result);
   const typedResult = result as Order[];
     if (typedResult.length > 0) {
         return typedResult[0];

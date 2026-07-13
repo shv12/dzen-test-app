@@ -6,7 +6,7 @@ export const POST = async (request: Request) => {
   const connection = await createConnection();
   let result = null;
     const { payload} = await request.json();
-    console.log("api/products/add :: POST :: payload", payload);
+    // console.log("api/products/add :: POST :: payload", payload);
   try {
     result = await addProduct({ connection, payload });
   } finally {

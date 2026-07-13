@@ -109,11 +109,11 @@ export default function AddProductForm() {
 const handleSubmit = async (values: ProductFormValues, { resetForm }: {resetForm: () => void}) => {
   try {
     values.orderID = ordersData.currentOrder!.id;
-    console.log("AddProductForm :: handleSubmit :: values", values);
+    // console.log("AddProductForm :: handleSubmit :: values", values);
     const response = await api.post("/api/products/add", { payload: values });
     const { success, result } = response.data;
     if (success) {
-      console.log("AddProductForm :: handleSubmit :: result", result);
+      // console.log("AddProductForm :: handleSubmit :: result", result);
       dispatch(addProductAction(result));
       let priceUAH = values.priceUAH;
       if (typeof priceUAH === 'string') {
@@ -123,7 +123,7 @@ const handleSubmit = async (values: ProductFormValues, { resetForm }: {resetForm
       if (typeof priceUSD === 'string') {
         priceUSD = parseFloat(priceUSD);
       }
-      console.log("AddProductForm :: handleSubmit :: priceUAH", priceUAH, "priceUSD", priceUSD);
+      // console.log("AddProductForm :: handleSubmit :: priceUAH", priceUAH, "priceUSD", priceUSD);
       dispatch(addProductToAction({
         orderID: ordersData.currentOrder!.id,
         priceUAH: priceUAH,
