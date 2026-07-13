@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { z } from "zod";
-import {useRouter} from "next/navigation"
+import {useRouter, useSearchParams} from "next/navigation"
 import { Formik, Form, Field, ErrorMessage, FormikErrors, FormikTouched } from "formik";
 import AppLink from "../AppLink/AppLink";
 import { FormFieldType } from "@/app/types/definitions";
@@ -20,6 +20,8 @@ export default function AddOrderForm() {
   const t = useTranslations(dict);
   const orderSchema = createOrderSchema(t);
   type OrderFormValues = z.infer<typeof orderSchema>;
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -66,8 +68,10 @@ export default function AddOrderForm() {
       const response = await api.post("/seed", { action: "addOrder", payload: values });
       const { success, result } = response.data;
       if (success) {
+        const newPath = `/${locale}/orders`;
+        const strParams = params.toString();
         dispatch(addOrderAction(result));
-        router.push(`/${locale}/orders`);
+        router.push(strParams === "" ? newPath : `${newPath}?${strParams}`);
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {

@@ -40,8 +40,8 @@ export const ordersSlice = createSlice({
     },
     deleteOrderAction(state, action: PayloadAction<number>) {
       state.orders = state.orders.filter(
-          (el) => el.id !== action.payload
-        )
+        (el) => el.id !== action.payload
+      )
     },
     deleteProductFromOrder(state, action: PayloadAction<{ productID: number, orderID: number, priceUAH: number, priceUSD: number }>) {
       const { orderID, priceUAH, priceUSD } = action.payload;
@@ -72,8 +72,11 @@ export const ordersSlice = createSlice({
       state.currentOrderIndex = null;
       state.mode = "long";
     },
-    setInitialOrders(state, action: PayloadAction<Order[]>) {
-      state.orders = action.payload;
+    setInitialOrders(state, action: PayloadAction<{ orders: Order[], currentOrderID: number | null }>) {
+      const { orders, currentOrderID } = action.payload;
+      state.orders = orders;
+      const arrCurrentOrder = state.orders.filter((order) => order.id === currentOrderID);
+      state.currentOrder = arrCurrentOrder.length > 0 ? arrCurrentOrder[0] : null;
     },
     showOrderProducts(state, action: PayloadAction<{ order: Order, orderIndex: number }>) {
       const { order, orderIndex } = action.payload;

@@ -11,7 +11,7 @@ import { addProductAction } from "@/app/lib/redux/productsSlice";
 import { addProductToAction } from "@/app/lib/redux/ordersSlice";
 import { useAppDispatch, useAppSelector, useTranslations } from "@/app/lib/hooks";
 import { ordersSelector, localeSelector, productTypesSelector } from "@/app/lib/redux/selectors";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ProductType } from "@/app/types/definitions";
 
 const initialValues = {
@@ -29,11 +29,13 @@ export default function AddProductForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const ordersData = useAppSelector(ordersSelector);
-  const { dict } = useAppSelector(localeSelector);
+  const { locale, dict } = useAppSelector(localeSelector);
   const t = useTranslations(dict);
   const productSchema = createProductSchema(t);
   type ProductFormValues = z.infer<typeof productSchema>;
   const { productTypes } = useAppSelector(productTypesSelector);
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
 
   const fields: FormFieldType[] = [
       {
@@ -107,7 +109,7 @@ export default function AddProductForm() {
 const handleSubmit = async (values: ProductFormValues, { resetForm }: {resetForm: () => void}) => {
   try {
     values.orderID = ordersData.currentOrder!.id;
-    // console.log("AddProductForm :: handleSubmit :: values", values);
+    console.log("AddProductForm :: handleSubmit :: values", values);
     const response = await api.post("/api/products/add", { payload: values });
     const { success, result } = response.data;
     if (success) {
@@ -126,7 +128,9 @@ const handleSubmit = async (values: ProductFormValues, { resetForm }: {resetForm
         priceUAH: priceUAH,
         priceUSD: priceUSD
       }));
-      router.push("/orders");
+      const path = `/${locale}/orders`;
+      const strParams = params.toString();
+      router.push(strParams === "" ? path : `${path}?${strParams}`);
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {

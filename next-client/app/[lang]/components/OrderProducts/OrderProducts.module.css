@@ -1,3 +1,8 @@
 .component {
     margin-top: 12px;
 }
+
+.addProductLink {
+    text-decoration: none;
+    color: var(--color-green-600);
+}

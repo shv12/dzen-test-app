@@ -12,16 +12,20 @@ import { useAppDispatch } from "@/app/lib/hooks";
 import { deleteOrderAction, showOrderProducts, hideOrderProducts } from "@/app/lib/redux/ordersSlice";
 import { OrderProducts } from "../OrderProducts";
 import styles from "./OrdersList.module.css";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 export default function OrdersList() {
-  const { orders, mode, currentOrderIndex } = useAppSelector(ordersSelector);
-  // const [mode, setMode] = useState<OrderRowMode>("long");
-  // const [currentOrder, setCurrentOrder] = useState<number | null>(null);
+  const { orders } = useAppSelector(ordersSelector);
   const [orderToDelete, setOrderToDelete] = useState<Order | null>(null);
   const [deleteConfirmIsOpen, setDeleteConfirmIsOpen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const [orderToShow, setOrderToShow] = useState<Order | null>(null);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentOrderID = searchParams.get("orderID");
+  const mode = currentOrderID === null ? "long" : "short";
+  const { replace } = useRouter();
 
   const deleteOrder = async (id: number) => {
     setDeleteConfirmIsOpen(false);
@@ -48,15 +52,17 @@ export default function OrdersList() {
 
   const handleOrderClick = (order: Order, index: number) => {
     console.log('handleOrderClick :: order', order);
-    // setCurrentOrder(index);
     setOrderToShow(order);
-    // setMode("short");
+    const params = new URLSearchParams(searchParams);
 
-    if (mode === "short" && currentOrderIndex === index) {
+    if (mode === "short" && currentOrderID === order.id.toString()) {
       dispatch(hideOrderProducts());
+      params.delete("orderID");
     } else {
       dispatch(showOrderProducts({ order, orderIndex: index }));
+      params.set("orderID", order.id.toString());
     }
+    replace(`${pathname}?${params.toString()}`);
   }
 
   const handleProductsClose = () => {
@@ -79,7 +85,7 @@ export default function OrdersList() {
               mode={mode}
               onDelete={() => handleDelete(order)}
               onOrderClick={() => handleOrderClick(order, i)}
-              isCurrent={ currentOrderIndex === i}
+              isCurrent={ currentOrderID === order.id.toString()}
             />;
           } )}
       </tbody>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { setLocale } from "@/app/lib/redux/localeSlice";
 import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
 import { localeSelector } from "@/app/lib/redux/selectors";
@@ -17,6 +17,8 @@ export default function LocaleSelect() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { locale } = useAppSelector(localeSelector);
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
 
   const handleLocaleChange = (e: React.ChangeEvent<HTMLSelectElement, HTMLSelectElement>) => {
     if (!pathname) return;
@@ -24,10 +26,16 @@ export default function LocaleSelect() {
     const locale = e.target.value as Locale;
     const chunks = pathname.split("/");
     chunks[1] = locale;
+    const strParams = params.toString();
+    const newPath = chunks.join("/");
+
+    const newPathWithParams = strParams === "" ? newPath : `${newPath}?${params.toString()}`;
 
     dispatch(setLocale(locale));
-
-    router.push(chunks.join("/"));
+    console.log("LocaleSelect :: handleLocaleChange :: chunks", chunks);
+    // router.push(chunks.join("/"));
+    window.history.pushState({}, "", newPathWithParams);
+    router.refresh();
   }
 
   useEffect(() => {

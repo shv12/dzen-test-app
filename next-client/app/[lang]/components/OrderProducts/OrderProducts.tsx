@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { BsPlusCircleFill } from "react-icons/bs";
 import styles from "./OrderProducts.module.css";
 import { Order } from "@/app/types/definitions";
@@ -12,6 +12,7 @@ import { ordersSelector, productsSelector, localeSelector } from "@/app/lib/redu
 import { setOrderProducts } from "@/app/lib/redux/productsSlice";
 import { BiTrash } from "react-icons/bi";
 import { deleteProduct } from "@/app/lib/utils";
+import AppLink from "../AppLink/AppLink";
 
 interface OrderProductsProps {
   order: Order | null;
@@ -26,23 +27,19 @@ export default function OrderProducts({ order, onClose }: OrderProductsProps) {
   const products = useAppSelector(productsSelector);
   const { locale, dict } = useAppSelector(localeSelector);
   const t = useTranslations(dict);
-
-  const handleAddProduct = () => {
-    console.log("OrderProducts :: handleAddProduct :: order", order);
-    router.push(`/${locale}/products/add`);
-  }
+  const searchParams = useSearchParams();
+  const strCurrentOrderID = searchParams.get("orderID");
+  const currentOrderID = parseInt(strCurrentOrderID!);
 
   const handleDelete = async (productID: number, priceUAH: number, priceUSD: number) => {
-
     await deleteProduct(
       productID,
-      currentOrder!.id,
+      currentOrderID,
       priceUAH,
       priceUSD,
       dispatch,
       setIsLoading
     );
-
   }
 
   useEffect(() => {
@@ -50,7 +47,7 @@ export default function OrderProducts({ order, onClose }: OrderProductsProps) {
     async function fetchOrderProducts() {
       setIsLoading(true);
       try {
-        const {data} = await api.post("/api/products/getOrderProducts", { orderID: currentOrder!.id }, {signal: abortController.signal});
+        const {data} = await api.post("/api/products/getOrderProducts", { orderID: currentOrderID }, {signal: abortController.signal});
         // console.log("OrderProducts :: useEffect :: data", data);
         if (data.success) {
           dispatch(setOrderProducts(data.result));
@@ -69,7 +66,7 @@ export default function OrderProducts({ order, onClose }: OrderProductsProps) {
     return () => {
       abortController.abort();
     }
-  }, [currentOrder, dispatch]);
+  }, [currentOrder, currentOrderID, dispatch]);
 
   if (isLoading) {
     return <div className="ms-4">{t('loading')}</div>;
@@ -77,7 +74,7 @@ export default function OrderProducts({ order, onClose }: OrderProductsProps) {
 
   return <div className={`ms-4 border rounded shadow bg-white pb-4 ps-4 grow ${styles.component}`}>
     <header className="position-relative">
-      <div className="fw-bold pt-4 pe-4">{currentOrder!.orderName}</div>
+      <div className="fw-bold pt-4 pe-4">{currentOrder && currentOrder!.orderName}</div>
       <button
         type="button"
         onClick={onClose}
@@ -85,11 +82,9 @@ export default function OrderProducts({ order, onClose }: OrderProductsProps) {
         className="btn-close app__btn-close"
       ></button>
     </header>
-    <button
-      type="button"
-      onClick={handleAddProduct}
-      className="text-green-600"
-    ><BsPlusCircleFill size={20} className="d-inline me-2" />{t('addProduct')}</button>
+    <AppLink href="/products/add" className={styles.addProductLink}>
+      <BsPlusCircleFill size={20} className="d-inline me-2" />{t('addProduct')}
+    </AppLink>
     <div className="pe-4">
       <table className="table table-bordered text-gray-500 align-middle">
         <tbody>

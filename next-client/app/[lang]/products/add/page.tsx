@@ -14,6 +14,7 @@ export default function AddProduct() {
   const t = useTranslations(dict);
 
   useEffect(() => {
+    console.log("products/add :: useEffect :: currentOrder", currentOrder);
     if (!currentOrder) {
       router.push(`/${locale}/orders`);
     }
