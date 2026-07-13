@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector, useTranslations } from "@/app/lib/hooks
 import { ordersSelector, localeSelector, productTypesSelector } from "@/app/lib/redux/selectors";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ProductType } from "@/app/types/definitions";
+import { addProductTypeAction } from "@/app/lib/redux/productTypesSlice";
 
 const initialValues = {
     productType: '',
@@ -114,7 +115,8 @@ const handleSubmit = async (values: ProductFormValues, { resetForm }: {resetForm
     const { success, result } = response.data;
     if (success) {
       // console.log("AddProductForm :: handleSubmit :: result", result);
-      dispatch(addProductAction(result));
+      const { addedProduct, addedProductType } = result;
+      dispatch(addProductAction(addedProduct));
       let priceUAH = values.priceUAH;
       if (typeof priceUAH === 'string') {
         priceUAH = parseFloat(priceUAH);
@@ -131,6 +133,11 @@ const handleSubmit = async (values: ProductFormValues, { resetForm }: {resetForm
       }));
       const path = `/${locale}/orders`;
       const strParams = params.toString();
+
+      if (addedProductType) {
+        dispatch(addProductTypeAction(addedProductType));
+      }
+
       router.push(strParams === "" ? path : `${path}?${strParams}`);
       }
     } catch (err) {

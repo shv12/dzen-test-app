@@ -1,7 +1,8 @@
 The project is the application for manage Orders and Products.
 User can create and delete Orders and fill selected Order with Products. Products also can be deleted from Order.
 A Product consists of required fields: - Product type (can be selected or typed new); - Product name - Guarantee from (date) - Guarantee until (date) - Price in UAH
-Also it contains optional field: - Price in USD
+Also it contains optional field: - Price in USD.
+In Products page user can filter products by its type.
 
 The application interface supports two languages - English and Russian and user can switch between them in runtime.
 

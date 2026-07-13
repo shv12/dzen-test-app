@@ -30,9 +30,16 @@ export const addProduct = async ({ connection, payload }: {
   } = payload;
 
   // check if productTypes contains productType
-  let productTypeID = 0;
+  let productTypeID: number | undefined = 0;
+  let addedProductType: ProductType | undefined | null = undefined;
   if (typeof productType === "string") {
-    productTypeID = await getProductTypeID({connection, productType})
+    const productTypeResult = await getProductTypeID({ connection, productType });
+    if ("addedProductType" in productTypeResult) {
+      productTypeID = productTypeResult.addedProductType?.id;
+      addedProductType = productTypeResult.addedProductType;
+    } else {
+      productTypeID = productTypeResult.productTypeID;
+    }
   }
 
   const sql = `INSERT INTO products (
@@ -46,7 +53,7 @@ export const addProduct = async ({ connection, payload }: {
   ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const values = [
     productName,
-    productTypeID,
+    productTypeID!,
     guaranteeFrom,
     guaranteeUntil,
     priceUAH,
@@ -58,7 +65,7 @@ export const addProduct = async ({ connection, payload }: {
   // console.log('actions :: addProduct :: insertResult', insertResult);
   const addedProduct = await getProduct({ connection, productID: insertResult.insertId });
   // console.log('actions :: addProduct :: addedProduct', addedProduct);
-  return addedProduct;
+  return { addedProduct, addedProductType };
 }
 
 export const deleteOrder = async ({ connection, orderID }: {
@@ -202,6 +209,17 @@ export const getProductsCount = async ({ connection }: { connection: mysql.Conne
   return typedResult[0].productsCount;
 }
 
+const getProductType = async ({ connection, productTypeID }: {
+  connection: mysql.Connection,
+  productTypeID: number
+}) => {
+  const sql = `SELECT * FROM productTypes WHERE id = ?;`;
+  const values = [productTypeID];
+  const [result] = await connection.execute(sql, values);
+  const typedResult = result as ProductType[];
+  return typedResult.length > 0 ? typedResult[0] : null;
+}
+
 const getProductTypeID = async({ connection, productType }: {
   connection: mysql.Connection,
   productType: string
@@ -217,9 +235,13 @@ const getProductTypeID = async({ connection, productType }: {
     const values = [productType];
     const [insertResult] = await connection.execute(sql, values);
     const typedResult = insertResult as mysql.ResultSetHeader;
-    return typedResult.insertId;
+    const addedProductType = await getProductType({
+      connection,
+      productTypeID: typedResult.insertId
+    });
+    return { addedProductType };
   } else {
-    return typedResult[0].id;
+    return { productTypeID: typedResult[0].id };
   }
 
 }

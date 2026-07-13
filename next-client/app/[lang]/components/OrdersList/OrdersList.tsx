@@ -23,6 +23,7 @@ export default function OrdersList() {
   const [orderToShow, setOrderToShow] = useState<Order | null>(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
   const currentOrderID = searchParams.get("orderID");
   const mode = currentOrderID === null ? "long" : "short";
   const { replace } = useRouter();
@@ -53,7 +54,6 @@ export default function OrdersList() {
   const handleOrderClick = (order: Order, index: number) => {
     console.log('handleOrderClick :: order', order);
     setOrderToShow(order);
-    const params = new URLSearchParams(searchParams);
 
     if (mode === "short" && currentOrderID === order.id.toString()) {
       dispatch(hideOrderProducts());
@@ -62,15 +62,17 @@ export default function OrdersList() {
       dispatch(showOrderProducts({ order, orderIndex: index }));
       params.set("orderID", order.id.toString());
     }
-    replace(`${pathname}?${params.toString()}`);
+    const strParams = params.toString();
+    replace(strParams === "" ? pathname : `${pathname}?${strParams}`);
   }
 
   const handleProductsClose = () => {
-    // setCurrentOrder(null);
     setOrderToShow(null);
-    // setMode("long");
-
     dispatch(hideOrderProducts());
+    dispatch(hideOrderProducts());
+    params.delete("orderID");
+    const strParams = params.toString();
+    replace(strParams === "" ? pathname : `${pathname}?${strParams}`);
   }
 
 
