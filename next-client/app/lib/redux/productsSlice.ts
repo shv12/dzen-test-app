@@ -23,6 +23,7 @@ export const productsSlice = createSlice({
   reducers: {
       addProductAction(state, action: PayloadAction<Product>) {
       state.products.push(action.payload);
+      state.productsCount = state.productsCount + 1;
     },
     deleteOrderProduct(state, action: PayloadAction<number>) {
       // console.log("productsSlice :: deleteOrderProduct :: action.payload", action.payload);

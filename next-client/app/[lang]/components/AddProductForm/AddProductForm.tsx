@@ -123,6 +123,7 @@ const handleSubmit = async (values: ProductFormValues, { resetForm }: {resetForm
       if (typeof priceUSD === 'string') {
         priceUSD = parseFloat(priceUSD);
       }
+      console.log("AddProductForm :: handleSubmit :: priceUAH", priceUAH, "priceUSD", priceUSD);
       dispatch(addProductToAction({
         orderID: ordersData.currentOrder!.id,
         priceUAH: priceUAH,

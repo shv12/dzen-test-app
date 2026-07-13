@@ -106,7 +106,7 @@ export const getOrders = async ({ connection }: {connection: mysql.Connection}) 
         ORDER BY o.createdAt DESC;
     `;
     const [result] = await connection.execute(sql);
-    // console.log('getOrders :: result', result);
+    // console.log('actions :: getOrders :: result', result);
     return result as Order[];
 }
 
@@ -163,7 +163,7 @@ export const getProduct = async ({ connection, productID }: {
   const values = [productID];
   const [result] = await connection.execute(sql, values);
   const typedResult = result as Product[];
-  console.log('actions :: getProduct :: typedResult', typedResult);
+  // console.log('actions :: getProduct :: typedResult', typedResult);
   if (typedResult.length > 0) {
     return typedResult[0];
   } else {
